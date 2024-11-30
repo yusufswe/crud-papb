@@ -59,11 +59,8 @@ fun Homepage(
     authViewModel: AuthViewModel,
     toDoViewModel: ToDoViewModel = viewModel ()
 ) {
-    // Observe authentication state
     val authState = authViewModel.authState.observeAsState()
 
-
-    // Check for unauthenticated state and navigate to login if true
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
@@ -71,7 +68,6 @@ fun Homepage(
         }
     }
 
-    // Variables for to-do input
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
@@ -79,18 +75,14 @@ fun Homepage(
     var currentEditingItem by remember { mutableStateOf<ToDoItem?>(null) }
 
 
-    // To-do list state from ViewModel
     val toDoList by toDoViewModel.toDoList.collectAsState()
 
-    // Coroutine scope for operations
     val scope = rememberCoroutineScope()
 
-    // Load to-do items on page load
     LaunchedEffect(Unit) {
         toDoViewModel.loadToDoItems()
     }
 
-    // Layout
     Scaffold(topBar = {
         TopAppBar(
             title = { Text("To-Do App") },
@@ -108,7 +100,6 @@ fun Homepage(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Home Page", fontSize = 32.sp)
 
             OutlinedTextField(
                 value = title,
@@ -196,18 +187,22 @@ fun ToDoItemCard(item: ToDoItem, onEdit: (ToDoItem) -> Unit, onDelete: (ToDoItem
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = item.title,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = { onEdit(item) }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit Icon")
-                }
-                IconButton(onClick = { onDelete(item) }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete Icon")
+                Row {
+                    IconButton(onClick = { onEdit(item) }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit Icon")
+                    }
+                    IconButton(onClick = { onDelete(item) }) {
+                        Icon(Icons.Default.Delete, contentDescription = "Delete Icon")
+                    }
                 }
             }
             Text(
@@ -218,32 +213,3 @@ fun ToDoItemCard(item: ToDoItem, onEdit: (ToDoItem) -> Unit, onDelete: (ToDoItem
         }
     }
 }
-
-
-//@Composable
-//fun ToDoItemCard(item: ToDoItem, onEdit: (ToDoItem) -> Unit) {
-//    Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-//        Column(modifier = Modifier.padding(16.dp)) {
-//            Text(text = item.title, style = MaterialTheme.typography.titleMedium)
-//            Text(text = item.description, style = MaterialTheme.typography.bodyMedium)
-//            Text(text = if (item.isDone) "Done" else "Pending", style = MaterialTheme.typography.bodySmall)
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Row {
-//                TextButton(onClick = { onEdit(item) }) {
-//                    Text("Edit")
-//                }
-//            }
-//        }
-//    }
-//}
-
-//@Composable
-//fun ToDoItemCard(item: ToDoItem) {
-//    Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-//        Column(modifier = Modifier.padding(16.dp)) {
-//            Text(text = item.title, style = MaterialTheme.typography.titleMedium)
-//            Text(text = item.description, style = MaterialTheme.typography.bodyMedium)
-//            Text(text = if (item.isDone) "Done" else "Pending", style = MaterialTheme.typography.bodySmall)
-//        }
-//    }
-//}

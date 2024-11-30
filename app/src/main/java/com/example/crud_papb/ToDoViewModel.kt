@@ -1,6 +1,5 @@
 package com.example.crud_papb
 
-import com.example.crud_papb.ToDoRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +15,8 @@ class ToDoViewModel : ViewModel() {
 
     fun loadToDoItems() {
         viewModelScope.launch {
-            val items = repository.getToDoItems()    // Operasi asynchronous
-            _toDoList.value = items                  // Mengubah state UI setelah data didapat
+            val items = repository.getToDoItems()
+            _toDoList.value = items
         }
     }
 
@@ -29,22 +28,22 @@ class ToDoViewModel : ViewModel() {
             isDone = true
         )
         viewModelScope.launch {
-            repository.addToDoItem(newItem) // Operasi asynchronous menyimpan ke Firestore
-            loadToDoItems() // Memuat ulang data setelah menambahkan item baru
+            repository.addToDoItem(newItem)
+            loadToDoItems()
         }
     }
 
     fun updateToDoItem(updatedItem: ToDoItem) {
         viewModelScope.launch {
-            repository.updateToDoItem(updatedItem) // Operasi asynchronous untuk update di Firestore
-            loadToDoItems() // Memuat ulang data setelah update
+            repository.updateToDoItem(updatedItem)
+            loadToDoItems()
         }
     }
 
     fun deleteToDoItem(item: ToDoItem) {
         viewModelScope.launch {
-            repository.deleteToDoItem(item.id) // Hapus item berdasarkan ID
-            loadToDoItems()                   // Refresh daftar
+            repository.deleteToDoItem(item.id)
+            loadToDoItems()
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.crud_papb
 
-import com.example.crud_papb.ToDoItem
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
@@ -11,7 +10,7 @@ class ToDoRepository {
         db.collection("todos")
             .document(item.id)
             .set(item)
-            .await() // Menyimpan ke Firestore dengan coroutines
+            .await()
     }
 
     suspend fun getToDoItems(): List<ToDoItem> {
@@ -25,7 +24,7 @@ class ToDoRepository {
         db.collection("todos")
             .document(item.id)
             .set(item)
-            .await() // Memperbarui item di Firestore dengan coroutines
+            .await()
     }
 
     suspend fun deleteToDoItem(id: String) {
